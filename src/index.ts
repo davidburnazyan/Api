@@ -1,10 +1,12 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 const app = express();
 
+dotenv.config();
 app.use(express.json());
 
 app.get("/api", (req: Request, res: Response) => {
@@ -13,13 +15,11 @@ app.get("/api", (req: Request, res: Response) => {
   });
 });
 
-app.post("/api/posts", (req: Request, res: Response) => {
+app.post("/api/posts", verifyToken, (req: Request, res: Response) => {
   res.json({
     message: "did work the post Api",
   });
 });
-
-jwt;
 
 app.post("/api/login", (req: Request, res: Response) => {
   const user = {
@@ -33,5 +33,32 @@ app.post("/api/login", (req: Request, res: Response) => {
     });
   });
 });
+
+function verifyToken(req: Request, res: Response, next: NextFunction) {
+  const authHeader = req.headers["authorization"];
+
+  if (typeof authHeader !== undefined) {
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET as string,
+      (err: any, user: any) => {
+        console.log(err);
+
+        if (err) return res.sendStatus(403);
+
+        req.body.user = user;
+
+        next();
+      }
+    );
+  } else {
+    // Forbidden
+    res.sendStatus(403);
+  }
+}
 
 app.listen(5000, () => console.log("Server started on port 5000"));
