@@ -11,8 +11,9 @@ const SignIn = (req: Request, res: Response) => {
 
 const SignUp = (req: Request, res: Response) => {
   const user = {
-    username: req.body.name,
     email: req.body.email,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
   };
 
   jwt.sign(
