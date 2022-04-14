@@ -1,19 +1,32 @@
-const yup = require("yup");
+import * as Yup from "yup";
+import { ValidationMessages } from "../messages";
+import { ValidationRules } from "../rules";
 
-// Hidden for simplicity
-
-const authScheme = yup.object({
-  body: yup.object({
-    url: yup.string().url().required(),
-    title: yup.string().min(8).max(32).required(),
-    content: yup.string().min(8).max(255).required(),
-    contact: yup.string().email().required(),
-  }),
-  params: yup.object({
-    id: yup.number().required(),
-  }),
+export const authSignUpScheme = Yup.object({
+  email: Yup.string()
+    .email()
+    .max(255)
+    .required(ValidationMessages.EMAIL_REQUIRED),
+  password: Yup.string()
+    .min(8)
+    .max(32)
+    .required(ValidationMessages.PASSWORD_REQUIRED)
+    .matches(ValidationRules.PASSWORD, ValidationMessages.PASSWORD_REGEX),
+  passwordConfirmation: Yup.string()
+    .oneOf(
+      [Yup.ref("password"), null],
+      ValidationMessages.CONFIRMATION_PASSWORD_MUST_MUCH
+    )
+    .required(ValidationMessages.CONFIRMATION_PASSWORD_REQUIRED),
 });
 
-module.exports = {
-  authScheme,
-};
+export const authSignInScheme = Yup.object({
+  email: Yup.string()
+    .email()
+    .max(255)
+    .required(ValidationMessages.EMAIL_REQUIRED),
+  password: Yup.string()
+    .min(8)
+    .max(32)
+    .required(ValidationMessages.PASSWORD_REQUIRED),
+});

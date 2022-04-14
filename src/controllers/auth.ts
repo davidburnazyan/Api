@@ -2,14 +2,13 @@ const jwt = require("jsonwebtoken");
 
 import { Request, Response } from "express";
 
-const SignIn = (req: Request, res: Response) => {
-  console.log(1111);
+export const SignIn = (req: Request, res: Response) => {
   res.json({
     message: "Welcome to the Api",
   });
 };
 
-const SignUp = (req: Request, res: Response) => {
+export const SignUp = (req: Request, res: Response) => {
   const user = {
     email: req.body.email,
     password: req.body.password,
@@ -26,9 +25,4 @@ const SignUp = (req: Request, res: Response) => {
       });
     }
   );
-};
-
-module.exports = {
-  SignIn,
-  SignUp,
 };
