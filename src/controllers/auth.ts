@@ -18,7 +18,7 @@ export const SignUp = (req: Request, res: Response) => {
   jwt.sign(
     user,
     process.env.TOKEN_SECRET,
-    { expiresIn: "30s" },
+    { expiresIn: "1h" },
     (err: any, token: string) => {
       res.json({
         token,
