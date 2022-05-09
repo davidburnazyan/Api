@@ -13,12 +13,14 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
     token,
     process.env.TOKEN_SECRET,
     function (err: any, decoded: any) {
-      if (err)
+
+      if (err) {
         return res
           .status(500)
           .send({ auth: false, message: "Failed to authenticate token." });
-
-      res.status(200).send(decoded);
+      }
+        
+      next();
     }
   );
 }
