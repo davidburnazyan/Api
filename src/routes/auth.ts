@@ -8,7 +8,7 @@ const router = express.Router();
 
 const prefix = "/auth";
 
-router.post(`${prefix}/sign-in`, validateSchemes(authSignInScheme), SignIn);
+router.post(`${prefix}/sign-in`, SignIn); // validateSchemes(authSignInScheme)
 router.post(`${prefix}/sign-up`, validateSchemes(authSignUpScheme), SignUp);
 
 export default router;

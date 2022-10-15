@@ -6,10 +6,12 @@ import authRoute from "./routes/auth";
 import crudRoute from "./routes/crud";
 import { verifyToken } from "./middleware/verifyToken";
 
+const cors = require('cors');
 const app = express();
 
 dotenv.config();
 app.use(express.json());
+app.use(cors());
 
 const prefix = "/api";
 

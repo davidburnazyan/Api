@@ -1,6 +1,6 @@
 import express from "express";
 
-import { Read, Create } from "../controllers/crud";
+import { Read, Create } from "../controllers/message";
 
 const router = express.Router();
 const prefix = "/messages";

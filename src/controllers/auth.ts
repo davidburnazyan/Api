@@ -7,6 +7,8 @@ import { generateJWT } from '../utils/jwtToken';
 import { generateHashedPassword } from '../utils/generateHashePassword';
 
 export const SignIn = (req: Request, res: Response) => {
+  console.log(11111112222);
+  
   res.json({
     message: "Welcome to the Api",
   });
@@ -24,6 +26,7 @@ export const SignUp = async (req: Request, res: Response) => {
 
   try {
     const hashedPassword = await generateHashedPassword(password);
+    
     if(!hashedPassword) {
       throw new Error("-------hashedPassword");
     }
