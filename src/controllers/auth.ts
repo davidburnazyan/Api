@@ -5,6 +5,7 @@ import User from "../models/user";
 import { Request, Response } from "express";
 import { generateJWT } from "../utils/jwtToken";
 import { generateHashedPassword } from "../utils/generateHashePassword";
+import user from "../models/user";
 
 interface IBody {
   email: string;
@@ -14,12 +15,18 @@ interface IBody {
 }
 
 export const signIn = (req: Request, res: Response) => {
-  res.json({
-    access_token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZmMxNTIxNi01MGFhLTRiMmItYTBlOC01OTAzOWRkNzRkZDEiLCJpYXQiOjE2NjU5MDcwNzksImV4cCI6MTY2NjA4NzA3OX0.P3OTDatMyA13yNFcOsOSBJIjeDzW6PSdCO-P3_1VFJI",
-    refresh_token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZmMxNTIxNi01MGFhLTRiMmItYTBlOC01OTAzOWRkNzRkZDEiLCJpYXQiOjE2NjU5MDcwNzksImV4cCI6MTY2ODQ5OTA3OX0.GgqkYYTMR5lwfF3kqpCQe1-RYYtwGhGJS-eP_7eVrr8",
-  });
+  user
+    .findOne({ email: req.body.login })
+    .then(async (response) => {
+      const bcryptResponse = await bcrypt.compare(req.body.password, response.password)
+
+      if (bcryptResponse) {
+        res.json({
+          access_token: response.access_token,
+          refresh_token: response.refresh_token
+        });
+      }
+    })
 };
 
 export const signUp = async (req: Request, res: Response) => {
@@ -54,6 +61,8 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 export const getUserInfo = (req: Request, res: Response) => {
+  // by access token, or Id
+
   res.json({
     age: "26",
     name: "David",

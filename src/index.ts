@@ -17,7 +17,7 @@ const prefix = "/api";
 
 const mongoDB = process.env.DB_URL || "";
 
-mongoose.connect(mongoDB); //  { useNewUrlParser: true, useUnifiedTopology: true} // 1
+mongoose.connect('mongodb+srv://david:llNo5t0hE8a5RPes@cluster0.v9b7v.mongodb.net/?retryWrites=true&w=majority'); //  { useNewUrlParser: true, useUnifiedTopology: true} // 1
 
 const db = mongoose.connection; // 2
 
