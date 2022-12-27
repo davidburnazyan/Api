@@ -3,6 +3,14 @@ import { ValidationMessages } from "../messages";
 import { ValidationRules } from "../rules";
 
 export const authSignUpScheme = Yup.object({
+  name: Yup.string()
+  .min(2)
+  .max(20)
+  .required(),
+  surname: Yup.string()
+  .min(2)
+  .max(40)
+  .required(),
   email: Yup.string()
     .email()
     .max(255)

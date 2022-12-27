@@ -16,7 +16,7 @@ interface IBody {
 
 export const signIn = (req: Request, res: Response) => {
   user
-    .findOne({ email: req.body.login })
+    .findOne({ email: req.body.email })
     .then(async (response) => {
       const bcryptResponse = await bcrypt.compare(req.body.password, response.password)
 
@@ -61,13 +61,27 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 export const getUserInfo = (req: Request, res: Response) => {
-  // by access token, or Id
+  const bearerToken = req.headers.authorization as string;
 
-  res.json({
-    age: "26",
-    name: "David",
-    surname: "Burnazyan",
-    phone: "+37491335303",
-    email: "david.burnazyan.96@gmail.com",
-  });
+  const splitted = bearerToken.split(' ')
+
+  if(splitted.length !== 2) {
+    res.json({
+      message: "Something went wrong."
+    })
+  }
+
+  user
+    .findOne({ access_token: splitted[1] })
+    .then(async (response) => {
+        console.log(response);
+        
+      if (response) {
+        res.json({
+          email: response.email,
+          name: response.name,
+          surname: response.surname,
+        });
+      }
+    })
 };
