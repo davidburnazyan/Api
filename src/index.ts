@@ -15,15 +15,15 @@ app.use(cors());
 
 const prefix = "/api";
 
-const mongoDB = process.env.DB_URL || "";
+const localDb = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.3.1";
+const mongoDB = process.env.MONO_DB_URL || localDb;
 
-mongoose.connect('mongodb+srv://davidburnazyan:jXKHcYjkczynI4Ft@cluster0.xh5nagh.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect(mongoDB);
 
 const db = mongoose.connection; // 2
 
 app.use(prefix, authRoute);
-// app.use(prefix, verifyToken, crudRoute);
-app.use(prefix, crudRoute);
+app.use(prefix, verifyToken, crudRoute);
 
 db.on("error", console.error.bind(console, "MongoDB connection error:")); // 3
 app.listen(5000, () => console.log("Server started on port 5000"));
