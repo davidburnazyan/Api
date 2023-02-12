@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import MessageModal from "../models/message";
+import WordModal from "../models/word";
 
 export const Read = async (req: Request, res: Response) => {
   try {
-    const response = await MessageModal.find();
+    const response = await WordModal.find();
 
     res.json({
       message: response,
@@ -15,10 +15,9 @@ export const Read = async (req: Request, res: Response) => {
 
 export const Create = async (req: Request, res: Response) => {
   try {
-    const response = await MessageModal.create({
-      message: req.body.message,
-      from: req.body.from,
-      to: req.body.to,
+    const response = await WordModal.create({
+      en: req.body.en,
+      arm: req.body.arm,
     });
 
     res.json({

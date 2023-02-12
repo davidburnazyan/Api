@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 
 import authRoute from "./routes/auth";
 import crudRoute from "./routes/crud";
+import wordRoute from "./routes/word";
+
 import { verifyToken } from "./middleware/verifyToken";
 
 const cors = require("cors");
@@ -15,13 +17,15 @@ app.use(cors());
 
 const prefix = "/api";
 
-const localDb = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.3.1";
+const localDb =
+  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.3.1";
 const mongoDB = process.env.MONO_DB_URL || localDb;
 
 mongoose.connect(mongoDB);
 
 const db = mongoose.connection; // 2
 
+app.use(prefix, wordRoute);
 app.use(prefix, authRoute);
 app.use(prefix, verifyToken, crudRoute);
 
