@@ -41,3 +41,25 @@ export const Create = async (req: Request, res: Response) => {
     res.json({ message: 'Something went wrong' });
   }
 };
+
+export const Delete = async (req: Request, res: Response) => {
+  try {
+
+    const checkExist = await WordModal
+      .findOneAndDelete({ $or: [{ 'en': req.body.en }, { 'arm': req.body.arm }] })
+
+
+    if (checkExist && Object.keys(checkExist).length) {
+      return res.json({
+        message: 'Following items was successfully deleted.',
+        response: checkExist
+      });
+    }
+
+    return res.json({
+      message: 'The given word is missing',
+    });
+  } catch (err) {
+    res.json({ message: 'Something went wrong' });
+  }
+};
