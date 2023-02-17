@@ -9,21 +9,35 @@ export const Read = async (req: Request, res: Response) => {
       message: response,
     });
   } catch (err) {
-    console.log(err, "------err");
+    res.json({ message: 'Something went wrong' });
   }
 };
 
 export const Create = async (req: Request, res: Response) => {
   try {
+
+    const checkExist = await WordModal
+      .find({ $or: [{ 'en': req.body.en }, { 'arm': req.body.arm }] })
+      .find({ $or: [{ 'en': { $regex: req.body.en } }, { 'arm': { $regex: req.body.arm } }] })
+
+    if (checkExist.length) {
+
+      return res.json({
+        message: 'Probably word already exist.',
+        response: checkExist
+      });
+    }
+
     const response = await WordModal.create({
       en: req.body.en,
       arm: req.body.arm,
     });
 
-    res.json({
-      message: response,
+    return res.json({
+      message: 'Word successfully added.',
+      response,
     });
   } catch (err) {
-    console.log(err, "------err");
+    res.json({ message: 'Something went wrong' });
   }
 };
