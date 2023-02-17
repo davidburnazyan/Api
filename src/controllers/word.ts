@@ -37,6 +37,7 @@ export const Create = async (req: Request, res: Response) => {
 export const Read = async (req: Request, res: Response) => {
   try {
 
+    // optimize here ...
     if (req.body?.en) {
       const response = await WordModal
         .find({ $or: [{ 'en': { $regex: req.body.en } }] })
