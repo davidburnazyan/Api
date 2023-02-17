@@ -36,11 +36,17 @@ export const Create = async (req: Request, res: Response) => {
 
 export const Read = async (req: Request, res: Response) => {
   try {
+
+    if (req.body?.en) {
+      const response = await WordModal
+        .find({ $or: [{ 'en': { $regex: req.body.en } }] })
+
+      return res.json({ response });
+    }
+
     const response = await WordModal.find();
 
-    res.json({
-      message: response,
-    });
+    return res.json({ response });
   } catch (err) {
     res.json({ message: 'Something went wrong' });
   }
