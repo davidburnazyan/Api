@@ -1,12 +1,13 @@
 import express from "express";
 
-import { Read, Create, Delete } from "../controllers/word";
+import { Read, Create, Delete, Update } from "../controllers/word";
 
 const router = express.Router();
 const prefix = "/v1";
 
-router.get(`${prefix}/words`, Read);
 router.post(`${prefix}/word`, Create);
+router.get(`${prefix}/words`, Read);
+router.patch(`${prefix}/word`, Update);
 router.delete(`${prefix}/word`, Delete);
 
 
