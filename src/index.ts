@@ -23,11 +23,11 @@ const mongoDB = process.env.MONO_DB_URL || localDb;
 
 mongoose.connect(mongoDB);
 
-const db = mongoose.connection; // 2
+const db = mongoose.connection;
 
 app.use(prefix, wordRoute);
 app.use(prefix, authRoute);
 app.use(prefix, verifyToken, crudRoute);
 
-db.on("error", console.error.bind(console, "MongoDB connection error:")); // 3
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.listen(5000, () => console.log("Server started on port 5000"));

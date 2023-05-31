@@ -1,6 +1,6 @@
 import express from "express";
 
-import { Read, Create, Delete, Update } from "../controllers/word";
+import { Read, Create, Delete, Update, ReadByGroup } from "../controllers/word";
 
 const router = express.Router();
 const prefix = "/v1";
@@ -10,5 +10,6 @@ router.get(`${prefix}/words`, Read);
 router.patch(`${prefix}/word`, Update);
 router.delete(`${prefix}/word`, Delete);
 
+router.get(`${prefix}/group`, ReadByGroup);
 
 export default router;

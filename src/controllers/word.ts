@@ -1,27 +1,39 @@
 import { Request, Response } from "express";
 import WordModal from "../models/word";
-
+import WordGroupModal from "../models/wordGroup";
 
 export const Create = async (req: Request, res: Response) => {
   try {
-
-    const checkExist = await WordModal
+    const isWordAlreadyExist = await WordModal
       .find({ $or: [{ 'en': req.body.en }, { 'arm': req.body.arm }] })
       .find({ $or: [{ 'en': { $regex: req.body.en } }, { 'arm': { $regex: req.body.arm } }] })
 
-    console.log(checkExist);
-
-    if (checkExist.length) {
-
+    if (isWordAlreadyExist.length) {
       return res.json({
         message: 'Probably word already exist.',
-        response: checkExist
+        response: isWordAlreadyExist
       });
+    }
+
+    let lastCreatedGroup = await WordGroupModal
+      .findOne().limit(1).sort({ $natural: -1 })
+
+    if (lastCreatedGroup.length === 0) {
+      lastCreatedGroup = await WordGroupModal.create({ name: 1 })
+    }
+
+    const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
+
+    if (wordsByGroup.length >= 1) {
+      // Why 10 because start from 0
+      const groupsCount = await WordGroupModal.countDocuments()
+      lastCreatedGroup = await WordGroupModal.create({ name: groupsCount + 1 })
     }
 
     const response = await WordModal.create({
       en: req.body.en,
       arm: req.body.arm,
+      group: lastCreatedGroup._id
     });
 
     return res.json({
@@ -33,11 +45,8 @@ export const Create = async (req: Request, res: Response) => {
   }
 };
 
-
 export const Read = async (req: Request, res: Response) => {
   try {
-
-    // optimize here ...
     if (req.body?.en) {
       const response = await WordModal
         .find({ $or: [{ 'en': { $regex: req.body.en } }] })
@@ -76,7 +85,6 @@ export const Update = async (req: Request, res: Response) => {
   }
 };
 
-
 export const Delete = async (req: Request, res: Response) => {
   try {
 
@@ -99,3 +107,21 @@ export const Delete = async (req: Request, res: Response) => {
   }
 };
 
+export const ReadByGroup = async (req: Request, res: Response) => {
+  try {
+    // Add logic if there are group id or name get by these
+    const lastCreatedGroup = await WordGroupModal
+      .findOne().limit(1).sort({ $natural: -1 })
+
+    const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
+
+    return res.json({
+      group: {
+        name: lastCreatedGroup.name,
+        words: wordsByGroup
+      }
+    });
+  } catch (err) {
+    res.json({ message: 'Something went wrong' });
+  }
+};
