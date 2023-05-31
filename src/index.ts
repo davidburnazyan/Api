@@ -2,11 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-import authRoute from "./routes/auth";
-import crudRoute from "./routes/crud";
-import wordRoute from "./routes/word";
-
 import { verifyToken } from "./middleware/verifyToken";
+import { LOCAL_DB } from "./config";
+import { RoutingService } from "./routes";
 
 const cors = require("cors");
 const app = express();
@@ -17,17 +15,15 @@ app.use(cors());
 
 const prefix = "/api";
 
-const localDb =
-  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.3.1";
-const mongoDB = process.env.MONO_DB_URL || localDb;
+const mongoDB = process.env.MONO_DB_URL || LOCAL_DB;
 
 mongoose.connect(mongoDB);
 
 const db = mongoose.connection;
 
-app.use(prefix, wordRoute);
-app.use(prefix, authRoute);
-app.use(prefix, verifyToken, crudRoute);
+app.use(prefix, RoutingService.wordRouting);
+app.use(prefix, RoutingService.authRoute);
+app.use(prefix, verifyToken, RoutingService.crudRoute);
 
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.listen(5000, () => console.log("Server started on port 5000"));

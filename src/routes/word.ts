@@ -1,15 +1,18 @@
 import express from "express";
 
-import { Read, Create, Delete, Update, ReadByGroup } from "../controllers/word";
+import { WordController } from "../controllers/word.controller";
 
 const router = express.Router();
 const prefix = "/v1";
 
-router.post(`${prefix}/word`, Create);
-router.get(`${prefix}/words`, Read);
-router.patch(`${prefix}/word`, Update);
-router.delete(`${prefix}/word`, Delete);
+router.get(`${prefix}/group`, WordController.readByGroup);
+router.get(`${prefix}/words`, WordController.read);
 
-router.get(`${prefix}/group`, ReadByGroup);
+router.post(`${prefix}/word`, WordController.create);
+
+router.patch(`${prefix}/word`, WordController.update);
+
+router.delete(`${prefix}/word`, WordController.delete);
+
 
 export default router;

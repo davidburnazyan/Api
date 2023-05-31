@@ -1,6 +1,6 @@
 import express from "express";
 
-import { Read, Create } from "../controllers/message";
+import { MessageController } from "../controllers/message.controller";
 
 const router = express.Router();
 const prefix = "/messages";
@@ -11,7 +11,7 @@ router.get(`${prefix}/123`, (req, res) => {
     message: "done",
   });
 });
-router.get(`${prefix}`, Read);
-router.post(`${prefix}`, Create);
+router.get(`${prefix}`, MessageController.read);
+router.post(`${prefix}`, MessageController.create);
 
 export default router;
