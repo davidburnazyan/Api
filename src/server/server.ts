@@ -7,8 +7,8 @@ import * as bodyParser from 'body-parser';
 import { Action } from 'routing-controllers';
 import { rateLimit } from 'express-rate-limit';
 import { useExpressServer } from 'routing-controllers';
-import { authorizationChecker } from '../decorators/authorization.checker';
-// import { Config } from '../config';
+// import { authorizationChecker } from '../decorators/authorization.checker';
+import { Config } from '../config';
 
 // import { ErrorHandlerMiddleware } from '../middlewares/error.handler.middleware';
 // import { ResponseInterceptor } from '../interceptors/response';
@@ -17,22 +17,20 @@ import { authorizationChecker } from '../decorators/authorization.checker';
 // @ts-ignore
 
 /** CONTROLLERS **/
-import { AuthController } from '../controllers/auth.controller';
 import { WordController } from '../controllers/word.controller';
-import { MessageController } from '../controllers/message.controller';
+// import { AuthController } from '../controllers/auth.controller';
+// import { MessageController } from '../controllers/message.controller';
 
 @Service()
 export class ExpressServer {
-    // public constructor(@Inject() private readonly config: Config) { }
+    public constructor(@Inject() private readonly config: Config) { }
     private server?: Express;
     public httpServer!: Server;
 
     public async setup(): Promise<Express> {
-
         const server = express();
-        // this.setupStandardMiddlewares(server);
+        this.setupStandardMiddlewares(server);
         await this.configureApiEndpoints(server);
-        // await this.setupSwaggerMiddlewares(server);
 
         this.httpServer = this.listen(server, 5000); // this.config.port
         this.server = server;
@@ -53,17 +51,17 @@ export class ExpressServer {
      * @param server
      */
     setupStandardMiddlewares(server: Express): void {
-        server.set('trust proxy', true);
+        // server.set('trust proxy', true);
 
-        const limiter = rateLimit({
-            windowMs: 15 * 60 * 1000, // 15 minutes
-            max: 1000 // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-        });
+        // const limiter = rateLimit({
+        //     windowMs: 15 * 60 * 1000, // 15 minutes
+        //     max: 1000 // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+        // });
 
         server.use(bodyParser.json());
         server.use(cors({ origin: '*' }));
-        server.use(bodyParser.urlencoded({ extended: true }));
-        server.use('/api', limiter)
+        // server.use(bodyParser.urlencoded({ extended: true }));
+        // server.use('/api', limiter)
     }
 
     public kill(): void {
@@ -75,12 +73,13 @@ export class ExpressServer {
      */
     async configureApiEndpoints(server: Express): Promise<void> {
         useExpressServer(server, {
-            authorizationChecker: (action: Action, roles: string[]) => authorizationChecker(action, roles),
-            routePrefix: '/api',
+            // authorizationChecker: (action: Action, roles: string[]) => authorizationChecker(action, roles),
+            authorizationChecker: (action: Action, roles: string[]) => true,
+            routePrefix: '/api/v1',
             controllers: [
-                AuthController,
                 WordController,
-                MessageController,
+                // AuthController,
+                // MessageController,
             ],
             defaultErrorHandler: false,
             // middlewares: [ErrorHandlerMiddleware],
@@ -88,16 +87,5 @@ export class ExpressServer {
 
         });
     }
-
-    /**
-     * @param server
-     */
-    // async setupSwaggerMiddlewares(server: Express) {
-    //     server.use(
-    //         '/api/docs',
-    //         swaggerUi.serve,
-    //         swaggerUi.setup(swaggerSpec())
-    //     );
-    // }
 }
 

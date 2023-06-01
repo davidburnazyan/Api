@@ -1,17 +1,17 @@
-import express from "express";
+// import express from "express";
 
-import { MessageController } from "../controllers/message.controller";
+// import { MessageController } from "../controllers/message.controller";
 
-const router = express.Router();
-const prefix = "/messages";
+// const router = express.Router();
+// const prefix = "/messages";
 
-router.get(`${prefix}/123`, (req, res) => {
-  res.json({
-    status: 200,
-    message: "done",
-  });
-});
-router.get(`${prefix}`, MessageController.read);
-router.post(`${prefix}`, MessageController.create);
+// router.get(`${prefix}/123`, (req, res) => {
+//   res.json({
+//     status: 200,
+//     message: "done",
+//   });
+// });
+// router.get(`${prefix}`, MessageController.read);
+// router.post(`${prefix}`, MessageController.create);
 
-export default router;
+// export default router;

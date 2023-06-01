@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
+import { JsonController } from "routing-controllers";
 import User from "../models/user";
 import { Request, Response } from "express";
 import { generateJWT } from "../utils/jwtToken";
@@ -14,6 +15,7 @@ interface IBody {
   password: string;
 }
 
+@JsonController('/auth')
 export class AuthController {
   static signIn(req: Request, res: Response) {
     user
