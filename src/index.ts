@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRoute from "./routes/auth";
 import crudRoute from "./routes/crud";
 import wordRoute from "./routes/word";
+import todoRoute from "./routes/todo";
 
 import { verifyToken } from "./middleware/verifyToken";
 
@@ -25,6 +26,7 @@ mongoose.connect(mongoDB);
 
 const db = mongoose.connection;
 
+app.use(prefix, todoRoute);
 app.use(prefix, wordRoute);
 app.use(prefix, authRoute);
 app.use(prefix, verifyToken, crudRoute);
