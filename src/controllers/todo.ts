@@ -7,7 +7,7 @@ export const get = async (req: Request, res: Response) => {
 
   return res.json({
     message: 'To Do',
-    response: response
+    data: response
   });
 }
 
@@ -20,7 +20,7 @@ export const create = async (req: Request, res: Response) => {
 
   return res.json({
     message: 'Created',
-    response: response
+    data: response
   });
 }
 
