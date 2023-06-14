@@ -21,13 +21,15 @@ export class AuthController {
     user
       .findOne({ email: req.body.email })
       .then(async (response) => {
-        const bcryptResponse = await bcrypt.compare(req.body.password, response.password)
+        if (response && response?.password) {
+          const bcryptResponse = await bcrypt.compare(req.body.password, response.password)
 
-        if (bcryptResponse) {
-          res.json({
-            access_token: response.access_token,
-            refresh_token: response.refresh_token
-          });
+          if (bcryptResponse) {
+            res.json({
+              access_token: response.access_token,
+              refresh_token: response.refresh_token
+            });
+          }
         }
       })
   }
