@@ -6,5 +6,5 @@ import { Container } from 'typedi';
 const app = Container.get(App);
 
 app.createApplication().then(() => {
-  console.info('The application was started! Kill it using Ctrl + C');
+  console.info('The application was started! Kill it using Ctrl + C ');
 })
