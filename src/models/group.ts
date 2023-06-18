@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const wordGroupSchema = new mongoose.Schema({
+const groupSchema = new mongoose.Schema({
   name: {
     type: String,
   },
@@ -10,4 +10,4 @@ const wordGroupSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("WordGroup", wordGroupSchema);
+export default mongoose.model("Group", groupSchema);

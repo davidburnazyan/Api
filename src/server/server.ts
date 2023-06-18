@@ -18,6 +18,8 @@ import { Config } from '../config';
 
 /** CONTROLLERS **/
 import { WordController } from '../controllers/word.controller';
+import { GroupController } from '../controllers/group.controller';
+
 // import { AuthController } from '../controllers/auth.controller';
 // import { MessageController } from '../controllers/message.controller';
 
@@ -77,6 +79,7 @@ export class ExpressServer {
             authorizationChecker: (action: Action, roles: string[]) => true,
             routePrefix: '/api/v1',
             controllers: [
+                GroupController,
                 WordController,
                 // AuthController,
                 // MessageController,

@@ -12,7 +12,7 @@ import {
 } from "routing-controllers";
 import { Service } from "typedi";
 import WordModal from "../models/word";
-import WordGroupModal from "../models/wordGroup";
+import WordGroupModal from "../models/group";
 import { HttpStatus } from "../enums";
 
 @Service()
@@ -127,34 +127,34 @@ export class WordController {
   // };
 
 
-  @Get('/')
-  @HttpCode(HttpStatus.OK)
-  static async readByGroup(
-    @QueryParams() query: any,
-    @Req() req: Request,
-    @Res() res: Response
-  ) {
-    try {
-      // Add logic if there are group id or name get by these
-      const lastCreatedGroup = await WordGroupModal
-        .findOne().limit(1).sort({ $natural: -1 })
+  // @Get('/')
+  // @HttpCode(HttpStatus.OK)
+  // static async readByGroup(
+  //   @QueryParams() query: any,
+  //   @Req() req: Request,
+  //   @Res() res: Response
+  // ) {
+  //   try {
+  //     // Add logic if there are group id or name get by these
+  //     const lastCreatedGroup = await WordGroupModal
+  //       .findOne().limit(1).sort({ $natural: -1 })
 
-      if (!lastCreatedGroup) {
-        return res.json({
-          'empty': 'empty'
-        });
-      }
+  //     if (!lastCreatedGroup) {
+  //       return res.json({
+  //         'empty': 'empty'
+  //       });
+  //     }
 
-      const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
+  //     const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
 
-      return res.json({
-        group: {
-          name: lastCreatedGroup.name,
-          words: wordsByGroup
-        }
-      });
-    } catch (err) {
-      res.json({ message: 'Something went wrong' });
-    }
-  };
+  //     return res.json({
+  //       group: {
+  //         name: lastCreatedGroup.name,
+  //         words: wordsByGroup
+  //       }
+  //     });
+  //   } catch (err) {
+  //     res.json({ message: 'Something went wrong' });
+  //   }
+  // };
 }
