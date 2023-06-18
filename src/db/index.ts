@@ -14,6 +14,7 @@ export class Db {
 
     public async init() {
         try {
+            mongoose.set("strictQuery", false);
             mongoose.connect(mongoDB);
             const db = mongoose.connection;
 
