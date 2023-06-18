@@ -32,7 +32,7 @@ export class ExpressServer {
         this.setupStandardMiddlewares(server);
         await this.configureApiEndpoints(server);
 
-        this.httpServer = this.listen(server, 5000); // this.config.port
+        this.httpServer = this.listen(server, this.config.port);
         this.server = server;
 
         return this.server

@@ -126,23 +126,35 @@ export class WordController {
   //   }
   // };
 
-  // @Get('/')
-  // static async readByGroup(req: Request, res: Response) {
-  //   try {
-  //     // Add logic if there are group id or name get by these
-  //     const lastCreatedGroup = await WordGroupModal
-  //       .findOne().limit(1).sort({ $natural: -1 })
 
-  //     const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
+  @Get('/')
+  @HttpCode(HttpStatus.OK)
+  static async readByGroup(
+    @QueryParams() query: any,
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    try {
+      // Add logic if there are group id or name get by these
+      const lastCreatedGroup = await WordGroupModal
+        .findOne().limit(1).sort({ $natural: -1 })
 
-  //     return res.json({
-  //       group: {
-  //         name: lastCreatedGroup.name,
-  //         words: wordsByGroup
-  //       }
-  //     });
-  //   } catch (err) {
-  //     res.json({ message: 'Something went wrong' });
-  //   }
-  // };
+      if (!lastCreatedGroup) {
+        return res.json({
+          'empty': 'empty'
+        });
+      }
+
+      const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
+
+      return res.json({
+        group: {
+          name: lastCreatedGroup.name,
+          words: wordsByGroup
+        }
+      });
+    } catch (err) {
+      res.json({ message: 'Something went wrong' });
+    }
+  };
 }
