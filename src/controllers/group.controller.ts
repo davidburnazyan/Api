@@ -15,7 +15,6 @@ import { HttpStatus } from "../enums";
 @Service()
 @JsonController('/groups')
 export class GroupController {
-
   @Get('/')
   @HttpCode(HttpStatus.OK)
   async read(

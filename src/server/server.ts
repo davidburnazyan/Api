@@ -53,17 +53,17 @@ export class ExpressServer {
      * @param server
      */
     setupStandardMiddlewares(server: Express): void {
-        // server.set('trust proxy', true);
+        server.set('trust proxy', true);
 
-        // const limiter = rateLimit({
-        //     windowMs: 15 * 60 * 1000, // 15 minutes
-        //     max: 1000 // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-        // });
+        const limiter = rateLimit({
+            windowMs: 15 * 60 * 1000, // 15 minutes
+            max: 1000 // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+        });
 
         server.use(bodyParser.json());
         server.use(cors({ origin: '*' }));
-        // server.use(bodyParser.urlencoded({ extended: true }));
-        // server.use('/api', limiter)
+        server.use(bodyParser.urlencoded({ extended: true }));
+        server.use('/api', limiter)
     }
 
     public kill(): void {
