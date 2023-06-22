@@ -45,7 +45,7 @@ export class WordController {
 
   @Post('/')
   @HttpCode(HttpStatus.OK)
-  static async create(
+  async create(
     @QueryParams() query: any,
     @Req() req: Request,
     @Res() res: Response
@@ -93,58 +93,58 @@ export class WordController {
     }
   };
 
-  // @Put('/')
-  // @HttpCode(HttpStatus.OK)
-  // static async update(
-  //   @Req() req: Request,
-  //   @Res() res: Response
-  // ) {
-  //   try {
-  //     const checkExist = await WordModal
-  //       .findOneAndUpdate({ $or: [{ 'en': req.body.find.en }, { 'arm': req.body.find.arm }] }, req.body.update)
+  @Put('/')
+  @HttpCode(HttpStatus.OK)
+  async update(
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    try {
+      const checkExist = await WordModal
+        .findOneAndUpdate({ $or: [{ 'en': req.body.find.en }, { 'arm': req.body.find.arm }] }, req.body.update)
 
 
-  //     if (checkExist && Object.keys(checkExist).length) {
-  //       return res.json({
-  //         message: 'Following items was successfully updated.',
-  //         response: checkExist
-  //       });
-  //     }
+      if (checkExist && Object.keys(checkExist).length) {
+        return res.json({
+          message: 'Following items was successfully updated.',
+          response: checkExist
+        });
+      }
 
-  //     return res.json({
-  //       message: 'The given word is missing',
-  //       response: req.body.find
-  //     });
+      return res.json({
+        message: 'The given word is missing',
+        response: req.body.find
+      });
 
-  //   } catch (err) {
-  //     res.json({ message: 'Something went wrong' });
-  //   }
-  // };
+    } catch (err) {
+      res.json({ message: 'Something went wrong' });
+    }
+  };
 
-  // @Delete('/')
-  // @HttpCode(HttpStatus.OK)
-  // static async delete(
-  //   @Req() req: Request,
-  //   @Res() res: Response
-  // ) {
-  //   try {
+  @Delete('/')
+  @HttpCode(HttpStatus.OK)
+  async delete(
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    try {
 
-  //     const checkExist = await WordModal
-  //       .findOneAndDelete({ $or: [{ 'en': req.body.en }, { 'arm': req.body.arm }] })
+      const checkExist = await WordModal
+        .findOneAndDelete({ $or: [{ 'en': req.body.en }, { 'arm': req.body.arm }] })
 
 
-  //     if (checkExist && Object.keys(checkExist).length) {
-  //       return res.json({
-  //         message: 'Following items was successfully deleted.',
-  //         response: checkExist
-  //       });
-  //     }
+      if (checkExist && Object.keys(checkExist).length) {
+        return res.json({
+          message: 'Following items was successfully deleted.',
+          response: checkExist
+        });
+      }
 
-  //     return res.json({
-  //       message: 'The given word is missing',
-  //     });
-  //   } catch (err) {
-  //     res.json({ message: 'Something went wrong', response: req.body });
-  //   }
-  // };
+      return res.json({
+        message: 'The given word is missing',
+      });
+    } catch (err) {
+      res.json({ message: 'Something went wrong', response: req.body });
+    }
+  };
 }
