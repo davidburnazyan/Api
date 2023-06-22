@@ -4,7 +4,7 @@ const groupSchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  word: {
+  words: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Word',
   },

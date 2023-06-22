@@ -9,7 +9,7 @@ import {
 } from "routing-controllers";
 import { Service } from "typedi";
 import WordModal from "../models/word";
-import WordGroupModal from "../models/group";
+import GroupModal from "../models/group";
 import { HttpStatus } from "../enums";
 
 @Service()
@@ -17,14 +17,12 @@ import { HttpStatus } from "../enums";
 export class GroupController {
   @Get('/')
   @HttpCode(HttpStatus.OK)
-  async read(
-    @QueryParams() query: any,
-    @Req() req: Request,
+  async readLast(
     @Res() res: Response
   ) {
     try {
       // Add logic if there are group id or name get by these
-      const lastCreatedGroup = await WordGroupModal
+      const lastCreatedGroup = await GroupModal
         .findOne().limit(1).sort({ $natural: -1 })
 
       if (!lastCreatedGroup) {

@@ -14,6 +14,7 @@ import {
 } from "routing-controllers";
 import { Service } from "typedi";
 import WordModal from "../models/word";
+
 import GroupModal from "../models/group";
 import { HttpStatus } from "../enums";
 
@@ -71,7 +72,7 @@ export class WordController {
 
       const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
 
-      if (wordsByGroup.length >= 1) {
+      if (wordsByGroup.length >= 10) {
         // Why 10 because start from 0
         const groupsCount = await GroupModal.countDocuments()
         lastCreatedGroup = await GroupModal.create({ name: groupsCount + 1 })
@@ -134,9 +135,21 @@ export class WordController {
 
 
       if (checkExist && Object.keys(checkExist).length) {
+        const lastCreatedGroup = await GroupModal
+          .findOne()
+          .limit(1).sort({ $natural: -1 })
+
+        if (lastCreatedGroup?._id) {
+          const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
+
+          if (!wordsByGroup.length) {
+            lastCreatedGroup.delete()
+          }
+        }
+
         return res.json({
           message: 'Following items was successfully deleted.',
-          response: checkExist
+          response: checkExist,
         });
       }
 
