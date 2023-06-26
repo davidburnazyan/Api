@@ -10,7 +10,9 @@ import {
   Req,
   Res,
   Params,
-  Body
+  Body,
+  UseAfter,
+  UseBefore
 } from "routing-controllers";
 import { Service } from "typedi";
 import WordModal from "../models/word";

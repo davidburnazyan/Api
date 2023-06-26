@@ -7,7 +7,7 @@ import * as bodyParser from 'body-parser';
 import { Action } from 'routing-controllers';
 import { rateLimit } from 'express-rate-limit';
 import { useExpressServer } from 'routing-controllers';
-// import { authorizationChecker } from '../decorators/authorization.checker';
+import { authorizationChecker } from '../decorators/authorization.checker';
 import { Config } from '../config';
 
 // import { ErrorHandlerMiddleware } from '../middlewares/error.handler.middleware';
@@ -19,8 +19,9 @@ import { Config } from '../config';
 /** CONTROLLERS **/
 import { WordController } from '../controllers/word.controller';
 import { GroupController } from '../controllers/group.controller';
+import { AuthController } from '../controllers/auth.controller';
+// import { AuthHandlerMiddleware } from "../middlewares/auth.handler.middleware";
 
-// import { AuthController } from '../controllers/auth.controller';
 // import { MessageController } from '../controllers/message.controller';
 
 @Service()
@@ -76,13 +77,11 @@ export class ExpressServer {
     async configureApiEndpoints(server: Express): Promise<void> {
         useExpressServer(server, {
             // authorizationChecker: (action: Action, roles: string[]) => authorizationChecker(action, roles),
-            authorizationChecker: (action: Action, roles: string[]) => true,
             routePrefix: '/api/v1',
             controllers: [
                 GroupController,
                 WordController,
-                // AuthController,
-                // MessageController,
+                AuthController,
             ],
             defaultErrorHandler: false,
             // middlewares: [ErrorHandlerMiddleware],
