@@ -9,7 +9,6 @@ import { generateHashedPassword } from "../utils/generateHashePassword";
 import user from "../models/user";
 import { Service } from "typedi";
 import { HttpStatus } from "../enums";
-// import { ErrorHandlerMiddleware } from '../middlewares/error.handler.middleware';
 
 interface IBody {
   email: string;
@@ -20,7 +19,6 @@ interface IBody {
 
 @Service()
 @JsonController('/auth')
-// @UseAfter(ErrorHandlerMiddleware)
 export class AuthController {
 
   @Post('/sign-in')
@@ -48,60 +46,68 @@ export class AuthController {
 
   }
 
-  // signUp(req: Request, res: Response) {
-  //   const { email, name, surname, password }: IBody = req.body;
+  @Post('/sign-up')
+  @HttpCode(HttpStatus.OK)
+  async signUp(
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    const { email, name, surname, password }: IBody = req.body;
 
-  //   try {
-  //     const hashedPassword = await generateHashedPassword(password);
+    try {
+      const hashedPassword = await generateHashedPassword(password);
 
-  //     if (!hashedPassword) {
-  //       throw new Error("-------hashedPassword");
-  //     }
+      if (!hashedPassword) {
+        throw new Error("Hashed Password Error:");
+      }
 
-  //     const token = await generateJWT({ email, password: hashedPassword });
+      const token = await generateJWT({ email, password: hashedPassword });
 
-  //     if (token) {
-  //       const user = await User.create({
-  //         email,
-  //         name,
-  //         surname,
-  //         password: hashedPassword,
-  //         access_token: token,
-  //         refresh_token: token,
-  //       });
+      if (!token) {
+        throw new Error("Token Missing Error:");
+      }
 
-  //       res.json({
-  //         user,
-  //       });
-  //     }
-  //   } catch (err) {
-  //     console.log("Error: ", err);
-  //   }
-  // };
+      const user = await User.create({
+        email,
+        name,
+        surname,
+        password: hashedPassword,
+        access_token: token,
+        refresh_token: token,
+      });
 
-  // getUserInfo(req: Request, res: Response) {
-  //   const bearerToken = req.headers.authorization as string;
+      res.json({
+        user,
+      });
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  };
 
-  //   const splitted = bearerToken.split(' ')
+  @Get('/getUserInfo')
+  @HttpCode(HttpStatus.OK)
+  async getUserInfo(
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    const bearerToken = req.headers.authorization as string;
 
-  //   if (splitted.length !== 2) {
-  //     res.json({
-  //       message: "Something went wrong."
-  //     })
-  //   }
+    const splitted = bearerToken.split(' ')
 
-  //   user
-  //     .findOne({ access_token: splitted[1] })
-  //     .then(async (response) => {
-  //       console.log(response);
+    if (splitted.length !== 2) {
+      return res.json({ message: "Something went wrong." })
+    }
 
-  //       if (response) {
-  //         res.json({
-  //           email: response.email,
-  //           name: response.name,
-  //           surname: response.surname,
-  //         });
-  //       }
-  //     })
-  // };
+    const response = await user.findOne({ access_token: splitted[1] })
+
+    if (!response) {
+      return res.json({ message: "Something went wrong." })
+    }
+
+    res.json({
+      email: response.email,
+      name: response.name,
+      surname: response.surname,
+    });
+  };
 }
