@@ -5,8 +5,9 @@ import { Security } from '../modules/security';
 const security = Container.get(Security);
 
 export const tokenParser = (request: Request) => {
-    const token = request.headers[ 'authorization' ];
-    if (!token)  {
+    const token = request.headers['authorization'];
+
+    if (!token) {
         return {
             success: false,
             message: ErrorMessages.MISSING_AUTHORIZATION
@@ -14,7 +15,7 @@ export const tokenParser = (request: Request) => {
         };
     }
 
-    const bearerToken = token.split('Bearer ')[ 1 ];
+    const bearerToken = token.split('Bearer ')[1];
 
     if (!bearerToken) {
         return {
@@ -24,13 +25,13 @@ export const tokenParser = (request: Request) => {
     }
 
     try {
-        const  data: any  = security.verifyJwt(bearerToken);
+        const data: any = security.verifyJwt(bearerToken);
 
-        if(data.data.type !== TokenTypes.ACCESS) {
-          return  {
-              success: false,
-              message: ErrorMessages.INVALID_TOKEN
-          }
+        if (data.data.type !== TokenTypes.ACCESS) {
+            return {
+                success: false,
+                message: ErrorMessages.INVALID_TOKEN
+            }
         }
 
         return {
@@ -38,7 +39,7 @@ export const tokenParser = (request: Request) => {
             userId: data.data.id
         }
 
-    }catch(e){
+    } catch (e) {
         return {
             success: false,
             message: ErrorMessages.TOKEN_PARSE_ERROR

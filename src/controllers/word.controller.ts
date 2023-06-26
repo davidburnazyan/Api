@@ -12,7 +12,8 @@ import {
   Params,
   Body,
   UseAfter,
-  UseBefore
+  UseBefore,
+  Authorized
 } from "routing-controllers";
 import { Service } from "typedi";
 import WordModal from "../models/word";
@@ -26,6 +27,7 @@ export class WordController {
 
   @Get('/')
   @HttpCode(HttpStatus.OK)
+  @Authorized()
   async read(
     @QueryParams() query: any,
     @Req() req: Request,

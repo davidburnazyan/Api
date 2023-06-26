@@ -9,9 +9,10 @@ import { tokenParser } from '../helpers/token.parser';
 import userModel from '../models/user';
 
 export const authorizationChecker = async (action: Action, roles: string[]): Promise<boolean> => {
-    console.log(action, roles, '==========action, roles');
-
     const result = tokenParser(action.request);
+
+    console.log(result, '-----result');
+
     if (!result.success) {
         throw new Exception(HttpStatusMessages.BAD_REQUEST, { message: result.message })
     }
