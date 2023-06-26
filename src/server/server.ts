@@ -10,7 +10,7 @@ import { useExpressServer } from 'routing-controllers';
 import { authorizationChecker } from '../decorators/authorization.checker';
 import { Config } from '../config';
 
-import { ErrorHandlerMiddleware } from '../middlewares/error.handler.middleware';
+// import { ErrorHandlerMiddleware } from '../middlewares/error.handler.middleware';
 // import { ResponseInterceptor } from '../interceptors/response';
 // import * as swaggerUi from 'swagger-ui-express';
 // import { swaggerSpec } from '../modules/swagger';
@@ -76,11 +76,9 @@ export class ExpressServer {
      */
     async configureApiEndpoints(server: Express): Promise<void> {
         useExpressServer(server, {
-            authorizationChecker: (action: Action, roles: string[]) => {
-                console.log(11111);
-
-                return authorizationChecker(action, roles)
-            },
+            // authorizationChecker: (action: Action, roles: string[]) => {
+            //     return authorizationChecker(action, roles)
+            // },
             routePrefix: '/api/v1',
             controllers: [
                 GroupController,
@@ -88,7 +86,7 @@ export class ExpressServer {
                 AuthController,
             ],
             defaultErrorHandler: false,
-            middlewares: [ErrorHandlerMiddleware],
+            // middlewares: [ErrorHandlerMiddleware],
             // interceptors: [ResponseInterceptor]
 
         });
