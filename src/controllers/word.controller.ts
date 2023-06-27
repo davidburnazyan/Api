@@ -6,14 +6,8 @@ import {
   Get,
   Put,
   Delete,
-  QueryParams,
   Req,
   Res,
-  Params,
-  Body,
-  UseAfter,
-  UseBefore,
-  Authorized
 } from "routing-controllers";
 import { Service } from "typedi";
 

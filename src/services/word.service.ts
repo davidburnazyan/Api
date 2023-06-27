@@ -42,7 +42,7 @@ export class WordService {
                 lastCreatedGroup = await this.groupRepository.create({ name: 1 })
             }
 
-            const wordsByGroup = await this.wordRepository.findAllByGroup({ groupId: lastCreatedGroup._id })
+            const wordsByGroup = await this.wordRepository.findAllByGroup(lastCreatedGroup._id)
 
             if (wordsByGroup.length >= 10) {
                 // Why 10 because start from 0
@@ -65,7 +65,6 @@ export class WordService {
             return { message: 'Something went wrong' };
         }
     }
-
 
     async update(req: Request) {
         try {
@@ -96,8 +95,7 @@ export class WordService {
                 const lastCreatedGroup = await this.groupRepository.findLastOne()
 
                 if (lastCreatedGroup?._id) {
-                    console.log(44444);
-                    const wordsByGroup = await this.wordRepository.findAllByGroup({ group: lastCreatedGroup._id })
+                    const wordsByGroup = await this.wordRepository.findAllByGroup(lastCreatedGroup._id)
 
                     if (!wordsByGroup.length) {
                         lastCreatedGroup.delete()
@@ -114,7 +112,6 @@ export class WordService {
                 message: 'The given word is missing',
             };
         } catch (err) {
-            console.log(9999);
             return { message: 'Something went wrong', response: req.body };
         }
     }

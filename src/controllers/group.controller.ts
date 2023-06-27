@@ -11,37 +11,26 @@ import { Service } from "typedi";
 import WordModal from "../models/word";
 import GroupModal from "../models/group";
 import { HttpStatus } from "../enums";
+import { GroupService } from "../services/group.service";
 
 @Service()
 @JsonController('/groups')
 export class GroupController {
+
+  constructor(private groupService: GroupService) { }
+
   @Get('/')
   @HttpCode(HttpStatus.OK)
-  async readLast(
+  async get(
+    @Req() req: Request,
     @Res() res: Response
   ) {
     try {
-      // Add logic if there are group id or name get by these
-      const lastCreatedGroup = await GroupModal
-        .findOne().limit(1).sort({ $natural: -1 })
+      const lastCreatedGroup = await this.groupService.getLastOne()
 
-      if (!lastCreatedGroup) {
-        return res.json({
-          message: 'Group is missing.'
-        });
-      }
-
-      const wordsByGroup = await WordModal.find({ group: lastCreatedGroup._id })
-
-      return res.json({
-        group: {
-          name: lastCreatedGroup.name,
-          words: wordsByGroup
-        }
-      });
+      res.json(lastCreatedGroup)
     } catch (err) {
       res.json({ message: 'Something went wrong.' });
     }
   };
-
 }
