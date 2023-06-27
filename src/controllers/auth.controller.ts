@@ -84,9 +84,9 @@ export class AuthController {
     }
   };
 
-  @Get('/getUserInfo')
+  @Get('/info')
   @HttpCode(HttpStatus.OK)
-  async getUserInfo(
+  async info(
     @Req() req: Request,
     @Res() res: Response
   ) {
