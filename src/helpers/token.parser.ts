@@ -26,8 +26,7 @@ export const tokenParser = (request: Request) => {
 
     try {
         const data: any = security.verifyJwt(bearerToken);
-
-        if (data.data.type !== TokenTypes.ACCESS) {
+        if (!data || data && !data?.email) {
             return {
                 success: false,
                 message: ErrorMessages.INVALID_TOKEN
@@ -36,7 +35,7 @@ export const tokenParser = (request: Request) => {
 
         return {
             success: true,
-            userId: data.data.id
+            email: data.email
         }
 
     } catch (e) {

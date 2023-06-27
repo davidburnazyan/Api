@@ -10,7 +10,7 @@ export const generateJWT = (user: IJWTUser) => {
         return jwt.sign(
             user,
             'secret',
-            { expiresIn: "1h" }
+            { expiresIn: "365d" }
           );
     } catch (err) {
         console.log(err, '-----');

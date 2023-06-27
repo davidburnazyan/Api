@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   Res,
+  Authorized,
 } from "routing-controllers";
 import { Service } from "typedi";
 
@@ -23,7 +24,6 @@ export class WordController {
 
   @Get('/')
   @HttpCode(HttpStatus.OK)
-  // @Authorized()
   async read(
     @Req() req: Request,
     @Res() res: Response

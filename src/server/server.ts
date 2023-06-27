@@ -20,6 +20,7 @@ import { Config } from '../config';
 import { WordController } from '../controllers/word.controller';
 import { GroupController } from '../controllers/group.controller';
 import { AuthController } from '../controllers/auth.controller';
+
 // import { AuthHandlerMiddleware } from "../middlewares/auth.handler.middleware";
 
 // import { MessageController } from '../controllers/message.controller';
@@ -76,10 +77,8 @@ export class ExpressServer {
      */
     async configureApiEndpoints(server: Express): Promise<void> {
         useExpressServer(server, {
-            // authorizationChecker: (action: Action, roles: string[]) => {
-            //     return authorizationChecker(action, roles)
-            // },
-            routePrefix: '/api/v1',
+            authorizationChecker: async (action: Action, roles: string[]) => authorizationChecker(action, roles),
+            routePrefix: '/api',
             controllers: [
                 GroupController,
                 WordController,
@@ -88,7 +87,6 @@ export class ExpressServer {
             defaultErrorHandler: false,
             // middlewares: [ErrorHandlerMiddleware],
             // interceptors: [ResponseInterceptor]
-
         });
     }
 }

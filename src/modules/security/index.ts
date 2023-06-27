@@ -60,7 +60,8 @@ export class Security {
         return jwt.sign({ data }, this.config.tokenSecret as string, { expiresIn });
     }
 
-    public verifyJwt(token: string): IPayload {
+    public verifyJwt(token: string): IPayload { 
+        // change IPayload
         try {
             return <IPayload>jwt.verify(token, this.config.tokenSecret);
         } catch (e) {
