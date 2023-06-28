@@ -14,23 +14,20 @@ import { HttpStatus } from "../enums";
 import { GroupService } from "../services/group.service";
 
 @Service()
-@JsonController('/groups')
+@JsonController("/groups")
 export class GroupController {
+  constructor(private groupService: GroupService) {}
 
-  constructor(private groupService: GroupService) { }
-
-  @Get('/')
+  @Get("/")
   @HttpCode(HttpStatus.OK)
-  async get(
-    @Req() req: Request,
-    @Res() res: Response
-  ) {
+  async get(@Req() req: Request, @Res() res: Response) {
     try {
-      const lastCreatedGroup = await this.groupService.getLastOne()
+      // const lastCreatedGroup = await this.groupService.getLastOne();
+      const groups = await this.groupService.getAll();
 
-      res.json(lastCreatedGroup)
+      res.json(groups);
     } catch (err) {
-      res.json({ message: 'Something went wrong.' });
+      res.json({ message: "Something went wrong." });
     }
-  };
+  }
 }
