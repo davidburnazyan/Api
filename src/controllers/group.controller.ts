@@ -17,16 +17,15 @@ import { GroupService } from "../services/group.service";
 @Service()
 @JsonController("/groups")
 export class GroupController {
-  constructor(private groupService: GroupService) { }
+  constructor(private groupService: GroupService) {}
 
   @Get("/")
   @HttpCode(HttpStatus.OK)
-  async get(@Req() req: Request, @Res() res: Response) {
+  async get(@Res() res: Response) {
     try {
-      // const lastCreatedGroup = await this.groupService.getLastOne();
-      const groups = await this.groupService.getAll();
+      const response = await this.groupService.getAll();
 
-      res.json(groups);
+      res.json({ data: response });
     } catch (err) {
       res.json({ message: "Something went wrong." });
     }
@@ -34,10 +33,7 @@ export class GroupController {
 
   @Get("/:id")
   @HttpCode(HttpStatus.OK)
-  async getOne(
-    @Params() params: any,
-    @Res() res: Response
-  ) {
+  async getOne(@Params() params: any, @Res() res: Response) {
     try {
       const groups = await this.groupService.getById(params.id);
 
