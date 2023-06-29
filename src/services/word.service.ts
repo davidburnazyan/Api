@@ -24,6 +24,15 @@ export class WordService {
         }
     }
 
+    async getRandom() {
+        try {
+            return await this.wordRepository.findRandom()
+        } catch (err: any) {
+            return { message: 'Something went wrong' };
+        }
+    }
+
+
     async create(req: Request) {
         try {
             const isWordAlreadyExist = await this.wordRepository.isExist(req)

@@ -6,6 +6,7 @@ import {
   QueryParams,
   Req,
   Res,
+  Params,
 } from "routing-controllers";
 import { Service } from "typedi";
 import WordModal from "../models/word";
@@ -16,7 +17,7 @@ import { GroupService } from "../services/group.service";
 @Service()
 @JsonController("/groups")
 export class GroupController {
-  constructor(private groupService: GroupService) {}
+  constructor(private groupService: GroupService) { }
 
   @Get("/")
   @HttpCode(HttpStatus.OK)
@@ -24,6 +25,21 @@ export class GroupController {
     try {
       // const lastCreatedGroup = await this.groupService.getLastOne();
       const groups = await this.groupService.getAll();
+
+      res.json(groups);
+    } catch (err) {
+      res.json({ message: "Something went wrong." });
+    }
+  }
+
+  @Get("/:id")
+  @HttpCode(HttpStatus.OK)
+  async getOne(
+    @Params() params: any,
+    @Res() res: Response
+  ) {
+    try {
+      const groups = await this.groupService.getById(params.id);
 
       res.json(groups);
     } catch (err) {

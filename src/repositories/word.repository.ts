@@ -19,6 +19,12 @@ export class WordRepository {
         return await WordModal.create(payload)
     }
 
+    async findRandom() {
+        return await WordModal.aggregate([
+            { $sample: { size: 10 } }
+        ]);
+    }
+
     async findAll() {
         return await WordModal.find()
     }

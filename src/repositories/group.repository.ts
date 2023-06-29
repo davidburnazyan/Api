@@ -1,10 +1,16 @@
 import { Service } from "typedi";
+import { Types } from "mongoose";
 import Group from "../models/group";
 
 @Service()
 export class GroupRepository {
+
   async findAll() {
     return await Group.find();
+  }
+
+  async findById(id: Types.ObjectId) {
+    return await Group.findOne({ _id: id });
   }
 
   async findLastOne() {

@@ -28,10 +28,21 @@ export class WordController {
     @Req() req: Request,
     @Res() res: Response
   ) {
-    const response = await this.wordService.getAll(req)
+    const words = await this.wordService.getAll(req)
 
-    res.json({ response })
+    res.json(words)
   };
+
+  @Get('/random')
+  @HttpCode(HttpStatus.OK)
+  async getRandom(
+    @Res() res: Response
+  ) {
+    const response = await this.wordService.getRandom()
+
+    res.json({ data: response })
+  };
+
 
   @Post('/')
   @HttpCode(HttpStatus.OK)
