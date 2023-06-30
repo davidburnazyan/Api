@@ -8,7 +8,7 @@ export class GroupService {
   constructor(
     @Inject() private readonly wordRepository: WordRepository,
     @Inject() private readonly groupRepository: GroupRepository
-  ) {}
+  ) { }
 
   async getLastOne() {
     try {
@@ -57,19 +57,19 @@ export class GroupService {
     try {
       const group = await this.groupRepository.findById(id);
 
-      if (group?._id) {
-        const wordsByGroup = await this.wordRepository.findAllByGroup(
-          group._id
-        );
-
-        return {
-          data: {
-            _id: group._id,
-            name: group.name,
-            words: wordsByGroup,
-          },
-        };
+      if (!group?._id) {
+        return { message: "The group is missing." };
       }
+      const wordsByGroup = await this.wordRepository.findAllByGroup(group._id);
+
+      return {
+        data: {
+          _id: group._id,
+          name: group.name,
+          words: wordsByGroup,
+        },
+      };
+
 
       return {
         message: "Words are missing",
@@ -82,4 +82,13 @@ export class GroupService {
       };
     }
   }
+
+  async deleteAll() {
+    try {
+      return await this.groupRepository.deleteAll()
+    } catch (err) {
+      return { message: 'Something went wrong' };
+    }
+  }
+
 }

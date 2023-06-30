@@ -7,6 +7,7 @@ import {
   Req,
   Res,
   Params,
+  Delete,
 } from "routing-controllers";
 import { Service } from "typedi";
 import WordModal from "../models/word";
@@ -17,7 +18,7 @@ import { GroupService } from "../services/group.service";
 @Service()
 @JsonController("/groups")
 export class GroupController {
-  constructor(private groupService: GroupService) {}
+  constructor(private groupService: GroupService) { }
 
   @Get("/")
   @HttpCode(HttpStatus.OK)
@@ -42,4 +43,14 @@ export class GroupController {
       res.json({ message: "Something went wrong." });
     }
   }
+
+  @Delete('/all')
+  @HttpCode(HttpStatus.OK)
+  async deleteAll(
+    @Res() res: Response
+  ) {
+    const response = await this.groupService.deleteAll()
+
+    res.json({ response })
+  };
 }

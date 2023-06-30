@@ -75,6 +75,45 @@ export class WordService {
         }
     }
 
+    async createByArray(req: Request) {
+        try {
+            const { array } = req.body
+
+            if (!array?.length) return { message: 'Something went wrong' }
+
+            for (let i = 0; i < array.length; i++) {
+                const { en, arm } = array[i]
+                let lastCreatedGroup = await this.groupRepository.findLastOne()
+
+                if (!lastCreatedGroup) {
+                    lastCreatedGroup = await this.groupRepository.create({ name: 1 })
+                }
+
+                const wordsByGroup = await this.wordRepository.findAllByGroup(lastCreatedGroup._id)
+
+                if (wordsByGroup.length >= 10) {
+                    // Why 10 because start from 0
+                    const groupsCount = await this.groupRepository.countDocuments()
+                    lastCreatedGroup = await this.groupRepository.create({ name: groupsCount + 1 })
+                }
+
+                await this.wordRepository.create({
+                    en,
+                    arm,
+                    group: lastCreatedGroup._id
+                });
+            }
+
+
+            return {
+                message: 'Array information successfully added.',
+            }
+
+        } catch (err) {
+            return { message: 'Something went wrong' };
+        }
+    }
+
     async update(req: Request) {
         try {
             const checkExist = await this.wordRepository.findOneAndUpdate(req)
@@ -122,6 +161,14 @@ export class WordService {
             };
         } catch (err) {
             return { message: 'Something went wrong', response: req.body };
+        }
+    }
+
+    async deleteAll() {
+        try {
+            return await this.wordRepository.deleteAll()
+        } catch (err) {
+            return { message: 'Something went wrong' };
         }
     }
 }

@@ -24,4 +24,8 @@ export class GroupRepository {
   async countDocuments() {
     return await Group.countDocuments();
   }
+
+  async deleteAll() {
+    return await Group.remove({})
+  }
 }

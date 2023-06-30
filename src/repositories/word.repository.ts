@@ -54,4 +54,8 @@ export class WordRepository {
         return await WordModal
             .findOneAndDelete({ $or: [{ 'en': req.body.en }, { 'arm': req.body.arm }] })
     }
+
+    async deleteAll() {
+        return await WordModal.remove({})
+    }
 }

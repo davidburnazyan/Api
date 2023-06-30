@@ -55,6 +55,17 @@ export class WordController {
     res.json({ response })
   };
 
+  @Post('/set-array')
+  @HttpCode(HttpStatus.OK)
+  async createByArray(
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    const response = await this.wordService.createByArray(req)
+
+    res.json({ response })
+  };
+
   @Put('/')
   @HttpCode(HttpStatus.OK)
   async update(
@@ -73,6 +84,17 @@ export class WordController {
     @Res() res: Response
   ) {
     const response = await this.wordService.delete(req)
+
+    res.json({ response })
+  };
+
+
+  @Delete('/all')
+  @HttpCode(HttpStatus.OK)
+  async deleteAll(
+    @Res() res: Response
+  ) {
+    const response = await this.wordService.deleteAll()
 
     res.json({ response })
   };
