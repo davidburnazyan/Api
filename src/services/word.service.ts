@@ -1,7 +1,9 @@
+import { Request } from 'express';
+import { Types } from 'mongoose';
 import { Service, Inject } from 'typedi';
+
 import { WordRepository } from '../repositories/word.repository';
 import { GroupRepository } from '../repositories/group.repository';
-import { Request, Response } from 'express';
 
 @Service()
 export class WordService {
@@ -31,7 +33,6 @@ export class WordService {
             return { message: 'Something went wrong' };
         }
     }
-
 
     async create(req: Request) {
         try {
@@ -114,22 +115,39 @@ export class WordService {
         }
     }
 
-    async update(req: Request) {
+    async update(id: Types.ObjectId, req: Request) {
         try {
-            const checkExist = await this.wordRepository.findOneAndUpdate(req)
+            const checkExist = await this.wordRepository.findById(id)
+            if (!checkExist) return { message: 'The given ID is missing' }
 
-            if (checkExist && Object.keys(checkExist).length) {
+            await checkExist.update(req.body)
+
+            const response = await this.wordRepository.findById(id)
+
+            return {
+                message: 'Following items was successfully updated.',
+                data: response
+            }
+
+        } catch (err) {
+            return { message: 'Something went wrong.' };
+        }
+    }
+
+    async deleteById(id: Types.ObjectId) {
+        try {
+            const checkExist = this.wordRepository.deleteById(id)
+
+            if (checkExist) {
                 return {
-                    message: 'Following items was successfully updated.',
-                    data: checkExist
-                }
+                    message: 'Following items was successfully deleted.',
+                    data: checkExist,
+                };
             }
 
             return {
                 message: 'The given word is missing',
-                data: req.body.find
             };
-
         } catch (err) {
             return { message: 'Something went wrong' };
         }

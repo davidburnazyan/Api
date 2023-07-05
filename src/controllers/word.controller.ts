@@ -9,6 +9,7 @@ import {
   Req,
   Res,
   Authorized,
+  Params,
 } from "routing-controllers";
 import { Service } from "typedi";
 
@@ -44,7 +45,7 @@ export class WordController {
   };
 
 
-  @Post('/')
+  @Post('/:id')
   @HttpCode(HttpStatus.OK)
   async create(
     @Req() req: Request,
@@ -66,13 +67,27 @@ export class WordController {
     res.json({ response })
   };
 
-  @Put('/')
+  @Put('/:id')
   @HttpCode(HttpStatus.OK)
   async update(
+    @Params() params: any,
     @Req() req: Request,
     @Res() res: Response
   ) {
-    const response = await this.wordService.create(req)
+    console.log(params);
+
+    const response = await this.wordService.update(params.id, req)
+
+    res.json({ response })
+  };
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.OK)
+  async deleteById(
+    @Params() params: any,
+    @Res() res: Response
+  ) {
+    const response = await this.wordService.deleteById(params.id)
 
     res.json({ response })
   };

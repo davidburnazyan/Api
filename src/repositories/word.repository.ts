@@ -9,7 +9,7 @@ interface ICreatePayload {
     group: Types.ObjectId
 }
 
-type GroupId = Types.ObjectId
+type ID = Types.ObjectId
 
 
 @Service()
@@ -29,7 +29,7 @@ export class WordRepository {
         return await WordModal.find()
     }
 
-    async findAllByGroup(groupId: GroupId) {
+    async findAllByGroup(groupId: ID) {
         return await WordModal.find({ group: groupId })
     }
 
@@ -43,11 +43,20 @@ export class WordRepository {
             .find({ $or: [{ 'en': { $regex: req.body.en } }, { 'arm': { $regex: req.body.arm } }] })
     }
 
-    async findOneAndUpdate(req: Request) {
-        return await WordModal
-            .findOneAndUpdate({
-                $or: [{ 'en': req.body.find.en }, { 'arm': req.body.find.arm }]
-            }, req.body.update)
+    async findById(id: ID) {
+        return await WordModal.findById(id)
+    }
+
+    // async findByIdAndUpdate(id: ID, req: Request) {
+    //     return await WordModal.findById(id)
+    //     // return await WordModal
+    //     //     .findOneAndUpdate({
+    //     //         $or: [{ 'en': req.body.find.en }, { 'arm': req.body.find.arm }]
+    //     //     }, req.body.update)
+    // }
+
+    async deleteById(id: ID) {
+        return await WordModal.findByIdAndDelete(id)
     }
 
     async findOneAndDelete(req: Request) {
